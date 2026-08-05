@@ -1,8 +1,6 @@
-<p align="center">
-  <img src="social-preview.png" alt="TradingView Themes" width="100%">
-</p>
-
 # 📈 TradingView Themes — ChartSkins
+
+![TradingView Themes](https://raw.githubusercontent.com/ImranDev3/tradingview-themes/main/social-preview.png)
 
 **100 hand-crafted professional TradingView chart color themes** with one-click color copy. Dark, Light, Minimal, Vibrant, Retro, ICT/SMC, Legendary Traders, Social Viral & ChartThemes collections — every theme ships with the full palette: candles (body + border + wick), background, grid, FVG/CRT tools, and Long/Short position tool colors.
 
