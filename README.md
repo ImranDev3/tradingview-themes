@@ -1,4 +1,6 @@
-![TradingView Themes — 100 Pro Chart Color Themes](social-preview.png)
+<p align="center">
+  <img src="social-preview.png" alt="TradingView Themes" width="100%">
+</p>
 
 # 📈 TradingView Themes — ChartSkins
 
