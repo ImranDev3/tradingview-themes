@@ -439,14 +439,18 @@ function renderGrid(){
     const cbtn=document.createElement('button');cbtn.className='copybtn';cbtn.textContent='Copy colors';
     cbtn.onclick=(e)=>{
       e.stopPropagation();
+      const TT=deriveTools(t);
       const lines=[`TradingView Theme — "${t.name}" (${CATS[t.cat].en})`,'='.repeat(40),'',
         'Background: '+t.bg,'Grid: '+t.grid,'Scale Text: '+t.text,'Last Price Line: '+t.accent,'',
         'Body Up: '+t.up,'Border Up: '+t.upB,'Wick Up: '+t.up,
         'Body Down: '+t.dn,'Border Down: '+t.dnB,'Wick Down: '+t.dn,'',
         'Volume Up (opacity '+Math.round(t.vol*100)+'%): '+t.up,'Volume Down (opacity '+Math.round(t.vol*100)+'%): '+t.dn,'',
-        'Bearish Zone / SL — Border: '+t.tools.rectB,'Bearish Zone / SL — BG (opacity '+t.tools.rectOp+'): '+t.tools.rectBG,
-        'Bullish Zone / TP — Border: '+t.upB,'Bullish Zone / TP — BG (opacity '+t.tools.rectOp+'): '+t.up,
-        'CRT High/Low + Key Level (dotted): '+t.tools.line,'Fib / Trend Line: '+t.tools.fib];
+        'TP Box BG (opacity '+TT.rectOp+'): '+TT.tpBG,'TP Border: '+TT.tpB,
+        'SL Box BG (opacity '+TT.rectOp+'): '+TT.slBG,'SL Border: '+TT.slB,
+        'Bullish FVG BG (opacity '+TT.rectOp+'): '+TT.bullZoneBG,'Bullish FVG Border: '+TT.bullZoneB,
+        'Bearish FVG BG (opacity '+TT.rectOp+'): '+TT.bearZoneBG,'Bearish FVG Border: '+TT.bearZoneB,
+        'Order Block BG: '+TT.neutralZoneBG,'Order Block Border: '+TT.obAccent,
+        'CRT High/Low (dotted): '+TT.crt,'Trend Line: '+TT.line,'Fib Levels: '+TT.fib,'Entry Line: '+TT.entryLine];
       navigator.clipboard.writeText(lines.join('\n')).then(()=>{
         showToast(null,21);
         cbtn.textContent='✓ Copied';cbtn.classList.add('done');
@@ -488,6 +492,7 @@ function openModal(t){
     <button class="dswbtn" data-hex="${hex}" data-name="${lab}"><span class="sw" style="background:${hex}"></span><span class="hex">${hex}</span></button></div>`).join('');
   const isLight=t.cat==='light';
   const dtxt=isLight?'#22283A':'#E8EBF2';
+  const T=deriveTools(t); // theme-matched tool set — every tool color derived from THIS theme's candles
   detailEl.innerHTML=`
     <div class="backbar">
       <button class="backbtn" id="backbtn">← Back to all themes</button>
@@ -544,37 +549,51 @@ function openModal(t){
       </div>
     </div>
 
-    <div class="dh2"><span class="ddot"></span><span class="bn">FVG / CRT / Position Tools</span></div>
-    <p class="dh2sub bn">Apply in the Style tab of Rectangle, Horizontal Ray and Long/Short tools</p>
+    <div class="dh2"><span class="ddot"></span><span class="bn">FVG / Order Block / Zones</span></div>
+    <p class="dh2sub bn">Rectangle & FVG tools — every color pulled from THIS theme's own candle palette, so zones blend with the chart</p>
     <div class="dgrid">
-      <div class="dcard"><h3>Bearish Zone / SL Box</h3>${rows([
-        ['Border','Rectangle border',t.tools.rectB],
-        ['Background','Opacity '+t.tools.rectOp,t.tools.rectBG]])}
+      <div class="dcard"><h3>Bullish FVG / Demand Zone</h3>${rows([
+        ['Border','Matches up-border',T.bullZoneB],
+        ['Background','Opacity '+T.rectOp+' · up body',T.bullZoneBG]])}
       </div>
-      <div class="dcard"><h3>Bullish Zone / TP Box</h3>${rows([
-        ['Border','Rectangle border',t.upB],
-        ['Background','Opacity '+t.tools.rectOp,t.up]])}
+      <div class="dcard"><h3>Bearish FVG / Supply Zone</h3>${rows([
+        ['Border','Matches down-border',T.bearZoneB],
+        ['Background','Opacity '+T.rectOp+' · down body',T.bearZoneBG]])}
       </div>
-      <div class="dcard"><h3>CRT + Lines</h3>${rows([
-        ['CRT High/Low + Key Level','Horizontal Ray · dotted',t.tools.line],
-        ['Fib / Trend Line','Trend line & fib levels',t.tools.fib],
+      <div class="dcard"><h3>Order Block</h3>${rows([
+        ['OB Border','Accent line',T.obAccent],
+        ['OB Background','Opacity '+T.rectOp+' · neutral',T.neutralZoneBG]])}
+      </div>
+    </div>
+
+    <div class="dh2"><span class="ddot"></span><span class="bn">CRT / Lines / Fib</span></div>
+    <p class="dh2sub bn">Horizontal Ray, Trend Line, Fib — all on the theme's accent so lines read clearly on the background</p>
+    <div class="dgrid">
+      <div class="dcard"><h3>CRT High / Low</h3>${rows([
+        ['CRT High/Low + Key Level','Horizontal Ray · dotted',T.crt]])}
+      </div>
+      <div class="dcard"><h3>Lines</h3>${rows([
+        ['Trend Line','Main trend line',T.line],
+        ['Fib Levels','Fib retracement levels',T.fib]])}
+      </div>
+      <div class="dcard"><h3>Text</h3>${rows([
         ['Drawing Text','Tool label text',dtxt]])}
       </div>
     </div>
 
     <div class="dh2"><span class="ddot"></span><span class="bn">Long / Short Position Tool</span></div>
-    <p class="dh2sub bn">Draw the Long/Short Position tool, then right-click → Settings → Style tab · same colors for both directions</p>
+    <p class="dh2sub bn">Draw the Long/Short Position tool, then right-click → Settings → Style tab · TP = up candle, SL = down candle of THIS theme</p>
     <div class="dgrid">
       <div class="dcard"><h3>TP Box (Profit Zone)</h3>${rows([
-        ['TP Background','Opacity '+t.tools.rectOp,t.up],
-        ['TP Border','Darker green shade',t.upB]])}
+        ['TP Background','Opacity '+T.rectOp+' · up body',T.tpBG],
+        ['TP Border','Matches up-border',T.tpB]])}
       </div>
       <div class="dcard"><h3>SL Box (Risk Zone)</h3>${rows([
-        ['SL Background','Opacity '+t.tools.rectOp,t.dn],
-        ['SL Border','Darker red shade',t.dnB]])}
+        ['SL Background','Opacity '+T.rectOp+' · down body',T.slBG],
+        ['SL Border','Matches down-border',T.slB]])}
       </div>
       <div class="dcard"><h3>Entry + Text</h3>${rows([
-        ['Entry Line','Position price line',dtxt],
+        ['Entry Line','Position price line',T.entryLine],
         ['Stats / Label Text','RR & P&L text — best readability','#FFFFFF']])}
       </div>
     </div>

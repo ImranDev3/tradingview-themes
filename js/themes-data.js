@@ -1,9 +1,38 @@
 // ============================================================
-// THEME VAULT — 50 Professional Trading Themes
+// THEME VAULT — 100+ Professional Trading Themes
 // Each theme: 12 core colors (bg, grid, candle body/border/wick up/down,
 // volume, text, accent) + rect/bg/line tool set.
 // All eye-comfort tuned: no pure black, no pure white, no neon.
+//
+// TOOL COLORS: every drawing-tool color is DERIVED from the theme's own
+// candle palette at render time (see deriveTools below) so Long/Short TP/SL,
+// Rectangle zones, Lines, FVG, Order Blocks and CRT always match the theme —
+// nothing generic, everything in harmony with the candles.
 // ============================================================
+
+// Derive a complete, theme-matched tool set from a theme's candle colors.
+// - TP / Bullish tools  → theme's up + upB
+// - SL / Bearish tools  → theme's dn + dnB
+// - Neutral / lines     → theme's accent (lines, fib, CRT, order-block accent)
+// - Rect zone opacity   → per-category comfort value
+function deriveTools(t){
+  const darkish = t.cat==='dark'||t.cat==='ict'||t.cat==='vibrant'||t.cat==='retro'||(t.cat==='legend'&&t.bg<'#888888')||t.cat==='social';
+  const op = darkish ? '15–20%' : '10–15%';
+  return {
+    // Long/Short Position tool
+    tpBG:t.up, tpB:t.upB,           // Take-profit box (bullish) = up candle
+    slBG:t.dn, slB:t.dnB,           // Stop-loss box (bearish) = down candle
+    // Rectangle / FVG / Order Block zones
+    bullZoneBG:t.up, bullZoneB:t.upB,   // bullish FVG / demand / OB-up
+    bearZoneBG:t.dn, bearZoneB:t.dnB,   // bearish FVG / supply / OB-down
+    neutralZoneBG:t.text, neutralZoneB:t.upB,
+    rectOp:op,
+    // Lines, Fib, CRT, Order-block accent
+    line:t.accent, fib:t.accent, crt:t.accent, obAccent:t.accent,
+    entryLine: darkish ? '#E8EBF2' : '#22283A',
+    text: darkish ? '#FFFFFF' : '#FFFFFF',
+  };
+}
 
 const THEMES = [
   // ---------------- DARK (12) ----------------
