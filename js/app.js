@@ -511,17 +511,17 @@ function openModal(t){
     </div>
 
     <div class="dh2"><span class="ddot"></span>Chart Canvas</div>
-    <p class="dh2sub bn">Apply in Settings → Appearance & Scales tabs</p>
+    <p class="dh2sub bn">Apply in Settings → Appearance & Scales tabs — all matched to the theme background</p>
     <div class="dgrid">
       <div class="dcard"><h3>Background & Grid</h3>${rows([
-        ['Background','Main chart background',t.bg],
-        ['Vert + Horz Grid','Nearly-invisible grid',t.grid],
-        ['Scale Text','Scales tab → Text color',t.text]])}
+        ['Background','Main chart background',T.bg],
+        ['Vert + Horz Grid','Nearly-invisible grid',T.grid],
+        ['Scale Text','Scales tab → Text color',T.scaleText]])}
       </div>
       <div class="dcard"><h3>Accent</h3>${rows([
         ['Last Price Line','Symbol → Price line',t.accent],
-        ['Crosshair','Appearance → Crosshair',t.text],
-        ['Watermark','Keep it very subtle',t.grid]])}
+        ['Crosshair','Appearance → Crosshair',T.crosshair],
+        ['Watermark','Keep it very subtle',T.watermark]])}
       </div>
     </div>
 
@@ -529,23 +529,23 @@ function openModal(t){
     <p class="dh2sub bn">Apply in Settings → Symbol tab, Candles section</p>
     <div class="dgrid">
       <div class="dcard"><h3>Up Candles</h3>${rows([
-        ['Body Up','Bullish candle body',t.up],
-        ['Border Up','Border = darker shade',t.upB],
-        ['Wick Up','Wick = body color',t.up]])}
+        ['Body Up','Bullish candle body',T.bodyUp],
+        ['Border Up','Border = darker shade',T.borderUp],
+        ['Wick Up','Wick = body color',T.wickUp]])}
       </div>
       <div class="dcard"><h3>Down Candles</h3>${rows([
-        ['Body Down','Bearish candle body',t.dn],
-        ['Border Down','Border = darker shade',t.dnB],
-        ['Wick Down','Wick = body color',t.dn]])}
+        ['Body Down','Bearish candle body',T.bodyDown],
+        ['Border Down','Border = darker shade',T.borderDown],
+        ['Wick Down','Wick = body color',T.wickDown]])}
       </div>
     </div>
 
     <div class="dh2"><span class="ddot"></span>Volume</div>
-    <p class="dh2sub bn">Symbol tab · set opacity to ${Math.round(t.vol*100)}%</p>
+    <p class="dh2sub bn">Symbol tab · set opacity to ${T.volOp} — matched to candles</p>
     <div class="dgrid">
       <div class="dcard"><h3>Volume</h3>${rows([
-        ['Volume Up','Opacity '+Math.round(t.vol*100)+'%',t.up],
-        ['Volume Down','Opacity '+Math.round(t.vol*100)+'%',t.dn]])}
+        ['Volume Up','Opacity '+T.volOp,T.volUp],
+        ['Volume Down','Opacity '+T.volOp,T.volDown]])}
       </div>
     </div>
 

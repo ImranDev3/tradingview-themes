@@ -19,18 +19,26 @@ function deriveTools(t){
   const darkish = t.cat==='dark'||t.cat==='ict'||t.cat==='vibrant'||t.cat==='retro'||(t.cat==='legend'&&t.bg<'#888888')||t.cat==='social';
   const op = darkish ? '15–20%' : '10–15%';
   return {
-    // Long/Short Position tool
-    tpBG:t.up, tpB:t.upB,           // Take-profit box (bullish) = up candle
-    slBG:t.dn, slB:t.dnB,           // Stop-loss box (bearish) = down candle
-    // Rectangle / FVG / Order Block zones
-    bullZoneBG:t.up, bullZoneB:t.upB,   // bullish FVG / demand / OB-up
-    bearZoneBG:t.dn, bearZoneB:t.dnB,   // bearish FVG / supply / OB-down
+    // ---- Chart Canvas (background, grid, scales — all matched to theme bg) ----
+    bg:t.bg, grid:t.grid, scaleText:t.text, watermark:t.grid,
+    crosshair:t.text, axisLine:t.grid, paneSep:t.grid,
+    // ---- Candles (body, border, wick — theme's own, already matched) ----
+    bodyUp:t.up, borderUp:t.upB, wickUp:t.up,
+    bodyDown:t.dn, borderDown:t.dnB, wickDown:t.dn,
+    // ---- Volume (matched to candles, theme's own opacity) ----
+    volUp:t.up, volDown:t.dn, volOp:Math.round(t.vol*100)+'%',
+    // ---- Long/Short Position tool (TP = up candle, SL = down candle) ----
+    tpBG:t.up, tpB:t.upB,
+    slBG:t.dn, slB:t.dnB,
+    // ---- FVG / Order Block / Zones (matched to candles) ----
+    bullZoneBG:t.up, bullZoneB:t.upB,
+    bearZoneBG:t.dn, bearZoneB:t.dnB,
     neutralZoneBG:t.text, neutralZoneB:t.upB,
     rectOp:op,
-    // Lines, Fib, CRT, Order-block accent
+    // ---- Lines, Fib, CRT, Order-block accent (theme accent, reads on bg) ----
     line:t.accent, fib:t.accent, crt:t.accent, obAccent:t.accent,
     entryLine: darkish ? '#E8EBF2' : '#22283A',
-    text: darkish ? '#FFFFFF' : '#FFFFFF',
+    text: '#FFFFFF',
   };
 }
 
